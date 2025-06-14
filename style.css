@@ -60,15 +60,6 @@ header p  { font-size: 1rem;   }
 
 .badge {
   display: inline-block;
-  background: #000;
-  color: #fff;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  margin-top: 0.5rem;
-  font-weight: bold;
-}
-.badge {
-  display: inline-block;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   font-weight: bold;
