@@ -25,35 +25,34 @@
   <script>
     // Fetch agent data and render cards
     fetch('https://tenant-advocate-api.vercel.app/api/agents')
-      .then(res => res.json())
-      .then(data => {
-  const grid = document.getElementById('agents-grid');
-  data.forEach(agent => {
-    // parse ratings
-    const googleScore     = parseFloat(agent.rating);
-    const trustpilotScore = parseFloat(agent.trustpilot_rating);
-    const avgScore        = (googleScore + trustpilotScore) / 2;
+          .then(data => {
+      const grid = document.getElementById('agents-grid');
+      data.forEach(agent => {
+        // parse ratings (fall back to 0 if missing)
+        const googleScore     = parseFloat(agent.googleRating)     || 0;
+        const trustpilotScore = parseFloat(agent.trustpilotRating) || 0;
+        const avgScore        = (googleScore + trustpilotScore) / 2;
 
-    // decide risk level
-    let riskLevel;
-    if (avgScore >= 4.0)        riskLevel = 'Low';
-    else if (avgScore >= 3.0)   riskLevel = 'Medium';
-    else                        riskLevel = 'High';
+        // decide risk level
+        let riskLevel;
+        if (avgScore >= 4.0)      riskLevel = 'Low';
+        else if (avgScore >= 3.0) riskLevel = 'Medium';
+        else                      riskLevel = 'High';
 
-    // build card
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <img src="${agent.image}" alt="${agent.name}">
-      <h2>${agent.name}</h2>
-      <p>${agent.location}</p>
-      <p>Google: ${googleScore.toFixed(1)} ⭐</p>
-      <p>Trustpilot: ${trustpilotScore.toFixed(1)} ⭐</p>
-      <span class="badge">${riskLevel}</span>
-    `;
-    grid.appendChild(card);
-  });
-});
+        // build card
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${agent.imageUrl}" alt="${agent.name}">
+          <h2>${agent.name}</h2>
+          <p>${agent.location}</p>
+          <p>Google: ${googleScore.toFixed(1)} ⭐</p>
+          <p>Trustpilot: ${trustpilotScore.toFixed(1)} ⭐</p>
+          <span class="badge ${riskLevel}">${riskLevel}</span>
+        `;
+        grid.appendChild(card);
+      });
+    });
 
     // Basic search filter
     document.getElementById('search').addEventListener('input', e => {
