@@ -10,14 +10,14 @@
     "name": "SafeStay Rentals",
     "location": "Manchester",
     "rating": "B",
-    "image": "https://via.placeholder.com/300x200?text=Agent+2"
+    "image": "https://via.placeholder.com/300x200?text=Agent+2",
     "trustpilot_rating": 4.2
   },
   {
     "name": "Prime Property Agents",
     "location": "Birmingham",
     "rating": "A",
-    "image": "https://via.placeholder.com/300x200?text=Agent+3"
+    "image": "https://via.placeholder.com/300x200?text=Agent+3",
     "trustpilot_rating": 4.2
   }
 ]
