@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tenant Advocate</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Tenant Advocate</h1>
+    <p>Your guide to the safest letting agents in the UK</p>
+  </header>
+
+  <div class="search-container">
+    <input type="text" id="search" placeholder="Search agents…">
+  </div>
+
+  <main>
+    <div class="grid" id="agents-grid">
+      <!-- Agent cards will be injected here -->
+    </div>
+  </main>
+
+  <script>
+    // Fetch agent data and render cards
+    fetch('agents.json')
+      .then(res => res.json())
+      .then(data => {
+        const grid = document.getElementById('agents-grid');
+        data.forEach(agent => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <img src="${agent.image}" alt="${agent.name}">
+            <h2>${agent.name}</h2>
+            <p>${agent.location}</p>
+            <span class="badge">${agent.rating}</span>
+          `;
+          grid.appendChild(card);
+        });
+      });
+
+    // Basic search filter
+    document.getElementById('search').addEventListener('input', e => {
+      const term = e.target.value.toLowerCase();
+      document.querySelectorAll('.card').forEach(card => {
+        const name = card.querySelector('h2').textContent.toLowerCase();
+        const loc  = card.querySelector('p').textContent.toLowerCase();
+        card.style.display = (name.includes(term) || loc.includes(term)) ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>
