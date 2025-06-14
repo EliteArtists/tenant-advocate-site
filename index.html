@@ -16,6 +16,16 @@
     <input type="text" id="search" placeholder="Search agents…">
   </div>
 
+  <!--  ADD AGENT FORM                                        -->
+  <!--  users fill this in and we’ll POST to your API below  -->
+  <form id="add-agent-form" style="margin:1em 0;">
+    <input name="name"         placeholder="Name"        required>
+    <input name="location"     placeholder="Location"    required>
+    <input name="full_address" placeholder="Full address"required>
+    <input name="slug"         placeholder="Slug (url-safe)" required>
+    <button type="submit">Add Agent</button>
+</form>
+
   <main>
     <div class="grid" id="agents-grid">
       <!-- Agent cards will be injected here -->
