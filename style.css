@@ -67,3 +67,14 @@ header p  { font-size: 1rem;   }
   margin-top: 0.5rem;
   font-weight: bold;
 }
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.badge.Low    { background: #28a745; } /* green */
+.badge.Medium { background: #ffc107; } /* amber */
+.badge.High   { background: #dc3545; } /* red */
