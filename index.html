@@ -75,5 +75,50 @@
       });
     });
   </script>
+
+    </script>
+
+  <!-- ── ADD AGENT FORM HANDLER ── -->
+  <script>
+    const form = document.querySelector('#add-agent-form');
+    const grid = document.querySelector('#agents-grid');
+
+    form.addEventListener('submit', async evt => {
+      evt.preventDefault();
+
+      const payload = {
+        name:         form.name.value,
+        location:     form.location.value,
+        full_address: form.full_address.value,
+        slug:         form.slug.value,
+      };
+
+      const res = await fetch('https://tenant-advocate-api.vercel.app/api/agents', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        return alert('Insert failed: ' + (data.error || res.statusText));
+      }
+
+      // render the newly inserted agent:
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${data.imageUrl}" alt="${data.name}">
+        <h2>${data.name}</h2>
+        <p>${data.location}</p>
+        <p>Google: ${parseFloat(data.googleRating).toFixed(1)} ⭐</p>
+        <p>Trustpilot: ${parseFloat(data.trustpilotRating).toFixed(1)} ⭐</p>
+        <span class="badge">${data.riskLevel}</span>
+      `;
+      grid.appendChild(card);
+
+      form.reset();
+    });
+  </script>
 </body>
 </html>
