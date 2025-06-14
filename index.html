@@ -24,7 +24,7 @@
 
   <script>
     // Fetch agent data and render cards
-    fetch('agents.json')
+    fetch('https://tenant-advocate-api.vercel.app/api/agents')
       .then(res => res.json())
       .then(data => {
   const grid = document.getElementById('agents-grid');
