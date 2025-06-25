@@ -44,6 +44,7 @@
       const imageUrl        = agent.image_url;
       const googleScore     = parseFloat(agent.google_rating)     || 0;
       const trustpilotScore = parseFloat(agent.trustpilot_rating) || 0;
+      const avgScore        = (googleScore + trustpilotScore) / 2;
 
       // decide risk level
       let riskLevel;
