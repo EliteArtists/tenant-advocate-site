@@ -78,18 +78,23 @@
     });
     // add slug‐based click & filter
 document.querySelectorAll('.card').forEach(card => {
-    const slug = card.dataset.slug;
-    card.addEventListener('click', () => {
-      window.location.hash = slug;
-      filterBySlug(slug);
-    });
+  const slug = card.dataset.slug;
+  card.addEventListener('click', () => {
+    window.location.hash = slug;
+    filterBySlug(slug);
   });
+});
 
-  // 2) the filter function hides all cards except the one matching the slug:
-  function filterBySlug(slug) {
-    document.querySelectorAll('.card').forEach(card => {
-      card.style.display = (card.dataset.slug === slug) ? '' : 'none';
-    });
+// 2) the filter function hides all cards except the one whose data-slug matches:
+function filterBySlug(slug) {
+  document.querySelectorAll('.card').forEach(card => {
+    card.style.display = (card.dataset.slug === slug) ? '' : 'none';
+  });
+}
+
+// 3) on page-load, if there’s already a hash in the URL, run the filter once:
+if (location.hash) {
+  filterBySlug(location.hash.slice(1));
   }
 
   // 3) on page-load, if there’s a hash already in the URL, run the filter once:
