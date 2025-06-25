@@ -74,6 +74,20 @@
         card.style.display = (name.includes(term) || loc.includes(term)) ? '' : 'none';
       });
     });
+    // add slug‐based click & filter
+document.querySelectorAll('.card').forEach(card => {
+  const slug = card.dataset.slug;
+  card.addEventListener('click', () => {
+    window.location.hash = slug;
+    filterBySlug(slug);
+  });
+});
+function filterBySlug(slug) {
+  document.querySelectorAll('.card').forEach(card => {
+    card.style.display = (card.dataset.slug === slug) ? '' : 'none';
+  });
+}
+if (window.location.hash) filterBySlug(window.location.hash.slice(1));
   </script>
 
   <!-- ── ADD AGENT FORM HANDLER ── -->
