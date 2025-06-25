@@ -53,6 +53,7 @@
       // build card
       const card = document.createElement('div');
       card.className = 'card';
+      card.setAttribute('data-slug', agent.slug);
       card.innerHTML = `
         <img src="${agent.imageUrl}" alt="${agent.name}">
         <h2>${agent.name}</h2>
