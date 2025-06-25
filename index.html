@@ -97,11 +97,6 @@ function filterBySlug(slug) {
 if (location.hash) {
   filterBySlug(location.hash.slice(1));
   }
-
-  // 3) on page-load, if there’s a hash already in the URL, run the filter once:
-  if (location.hash) {
-    filterBySlug(location.hash.slice(1));
-  }
 </script>
 
   <!-- ── ADD AGENT FORM HANDLER ── -->
