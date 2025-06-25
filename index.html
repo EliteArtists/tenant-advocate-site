@@ -54,9 +54,9 @@
       // build card
       const card = document.createElement('div');
       card.className = 'card';
-      card.setAttribute('data-slug', agent.slug);
+      card.setAttribute('data-slug', slug);
       card.innerHTML = `
-        <img src="${agent.imageUrl}" alt="${agent.name}">
+        <img src="${imageUrl}" alt="${agent.name}">
         <h2>${agent.name}</h2>
         <p>${agent.location}</p>
         <p>Google: ${googleScore.toFixed(1)} ⭐</p>
