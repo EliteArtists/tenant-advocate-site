@@ -40,9 +40,10 @@
     const grid = document.getElementById('agents-grid');
     data.forEach(agent => {
       // parse ratings (fall back to 0 if missing)
-      const googleScore     = parseFloat(agent.googleRating)     || 0;
-      const trustpilotScore = parseFloat(agent.trustpilotRating) || 0;
-      const avgScore        = (googleScore + trustpilotScore) / 2;
+      const slug            = agent.slug;
+      const imageUrl        = agent.image_url;
+      const googleScore     = parseFloat(agent.google_rating)     || 0;
+      const trustpilotScore = parseFloat(agent.trustpilot_rating) || 0;
 
       // decide risk level
       let riskLevel;
