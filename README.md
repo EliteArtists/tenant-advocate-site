@@ -66,3 +66,10 @@ created_at    timestamptz
 	4.	Vercel
 	•	Two projects: tenant-advocate-site (static) & tenant-advocate-api (functions).
 	•	Managed via the Vercel dashboard; automatic deploys on main.
+
+git clone https://github.com/EliteArtists/tenant-advocate-site.git
+cd tenant-advocate-site
+
+# No build step — just open index.html in your browser,
+# or serve from a local static server:
+npx serve .
