@@ -67,7 +67,7 @@ created_at    timestamptz
 	•	Two projects: tenant-advocate-site (static) & tenant-advocate-api (functions).
 	•	Managed via the Vercel dashboard; automatic deploys on main.
 
-QUICK START
+**QUICK START**
 
 git clone https://github.com/EliteArtists/tenant-advocate-site.git
 cd tenant-advocate-site
@@ -79,3 +79,11 @@ npx serve .
 3. Deploy
 	•	API: vercel --prod from tenant-advocate-api
 	•	Site: push to GitHub → automatic deploy on Vercel
+
+**Bulk-Import Workflow**
+	1.	Write a Node script that:
+	•	Reads a list of agency names/addresses
+	•	Calls Google Places API → retrieves photo_reference & rating
+	•	Calls Trustpilot API → retrieves trustpilot_rating
+	•	Upserts each row into Supabase via its REST or JS client
+	2.	Run it once for each city—or automate with a cron job.
