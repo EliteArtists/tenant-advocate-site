@@ -40,3 +40,29 @@ All data (agents’ names, locations, slugs, images, ratings) is stored in a **S
       ▲
       |
 [TenantAdvocate app]
+
+	1.	tenant-advocate-site
+	•	Fetches GET /api/agents
+	•	Renders a grid of cards; each card has a data-slug attribute.
+	•	Click a card or hash-link to filter by slug.
+	2.	tenant-advocate-api
+	•	Exposes /api/agents as a Vercel serverless function.
+	•	Uses Supabase JS client to select(…) and return JSON.
+	•	Supports POST to add new agents via the form on the frontend.
+	3.	Supabase
+
+id            serial
+name          text
+location      text
+full_address  text
+slug          text UNIQUE
+image_url     text
+google_rating numeric
+trustpilot_rating numeric
+created_at    timestamptz
+
+•	Row-level security: public SELECT on agents.
+
+	4.	Vercel
+	•	Two projects: tenant-advocate-site (static) & tenant-advocate-api (functions).
+	•	Managed via the Vercel dashboard; automatic deploys on main.
