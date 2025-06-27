@@ -1,138 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tenant Advocate</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tenant Advocate</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Tenant Advocate</h1>
-        <p>Your guide to the safest letting agents in the UK</p>
-    </header>
+  <header>
+    <h1>Tenant Advocate</h1>
+    <p>Your guide to the safest letting agents in the UK</p>
+  </header>
 
-    <div class="search-container">
-        <input type="text" id="search" placeholder="Search agents…">
-    </div>
+  <div class="search-container">
+    <input type="text" id="search" placeholder="Search agents…">
+  </div>
 
-    <form id="add-agent-form" style="margin:1em 0;">
-        <input name="name"           placeholder="Name"          required>
-        <input name="location"       placeholder="Location"      required>
-        <input name="full_address"   placeholder="Full address"  required>
-        <input name="slug"           placeholder="Slug (url-safe)" required>
-        <button type="submit">Add Agent</button>
-    </form>
+  <form id="add-agent-form" style="margin:1em 0;">
+    <input name="name"           placeholder="Name"          required>
+    <input name="location"       placeholder="Location"      required>
+    <input name="full_address"   placeholder="Full address"  required>
+    <input name="slug"           placeholder="Slug (url-safe)" required>
+    <button type="submit">Add Agent</button>
+  </form>
 
-    <main>
-        <div class="grid" id="agents-grid">
-            </div>
-    </main>
+  <main>
+    <div class="grid" id="agents-grid"></div>
+  </main>
 
-    <script>
-        // Utility function to filter cards by slug
-        function filterBySlug(slug) {
-            document.querySelectorAll('.card').forEach(card => {
-                card.style.display = (card.dataset.slug === slug) ? '' : 'none';
-            });
-        }
+  <script>
+    // Utility: hide all cards except matching slug
+    function filterBySlug(slug) {
+      document.querySelectorAll('.card').forEach(card => {
+        card.style.display = (card.dataset.slug === slug) ? '' : 'none';
+      });
+    }
 
-        // Function to create and append an agent card
-        function createAgentCard(agent) {
-            const slug = agent.slug;
-            const imageUrl = agent.image_url || 'https://via.placeholder.com/300x200?text=No+Image';
-            const googleScore = parseFloat(agent.google_rating) || 0;
-            const trustpilotScore = parseFloat(agent.trustpilot_rating) || 0;
-            const avgScore = (googleScore + trustpilotScore) / 2;
+    // Build a card element (with click handler)
+    function createAgentCard(agent) {
+      const slug = agent.slug;
+      const imageUrl = agent.image_url || 'https://via.placeholder.com/300x200?text=No+Image';
+      const googleScore = parseFloat(agent.google_rating) || 0;
+      const trustpilotScore = parseFloat(agent.trustpilot_rating) || 0;
+      const avgScore = (googleScore + trustpilotScore) / 2;
 
-            let riskLevel;
-            if (avgScore >= 4.0) riskLevel = 'Low';
-            else if (avgScore >= 3.0) riskLevel = 'Medium';
-            else riskLevel = 'High';
+      let riskLevel;
+      if (avgScore >= 4.0) riskLevel = 'Low';
+      else if (avgScore >= 3.0) riskLevel = 'Medium';
+      else riskLevel = 'High';
 
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.setAttribute('data-slug', slug);
-            card.innerHTML = `
-                <img src="${imageUrl}" alt="${agent.name}">
-                <h2>${agent.name}</h2>
-                <p>${agent.location}</p>
-                <p>Google: ${googleScore.toFixed(1)} ⭐</p>
-                <p>Trustpilot: ${trustpilotScore.toFixed(1)} ⭐</p>
-                <span class="badge ${riskLevel}">${riskLevel}</span>
-            `;
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.slug = slug;
+      card.innerHTML = `
+        <img src="${imageUrl}" alt="${agent.name}">
+        <h2>${agent.name}</h2>
+        <p>${agent.location}</p>
+        <p>Google: ${googleScore.toFixed(1)} ⭐</p>
+        <p>Trustpilot: ${trustpilotScore.toFixed(1)} ⭐</p>
+        <span class="badge ${riskLevel}">${riskLevel}</span>
+      `;
 
-            // Attach click listener directly when the card is created
-            card.addEventListener('click', () => {
-                window.location.hash = slug;
-                filterBySlug(slug);
-            });
+      card.addEventListener('click', () => {
+        window.location.hash = slug;
+        filterBySlug(slug);
+      });
 
-            return card;
-        }
+      return card;
+    }
 
-        // Fetch agent data and render cards
-        fetch('https://tenant-advocate-api.vercel.app/api/agents')
-            .then(res => res.json())
-            .then(data => {
-                const grid = document.getElementById('agents-grid');
-                data.forEach(agent => {
-                    const card = createAgentCard(agent);
-                    grid.appendChild(card);
-                });
+    // Fetch and render
+    fetch('https://tenant-advocate-api.vercel.app/api/agents')
+      .then(res => res.json())
+      .then(data => {
+        const grid = document.getElementById('agents-grid');
+        data.forEach(agent => grid.appendChild(createAgentCard(agent)));
+        if (location.hash) filterBySlug(location.hash.slice(1));
+      })
+      .catch(err => {
+        console.error('Fetch error:', err);
+        document.getElementById('agents-grid').innerHTML = 
+          '<p>Failed to load agents. Please try again later.</p>';
+      });
 
-                // After all initial cards are rendered, check for hash and apply filter
-                if (location.hash) {
-                    filterBySlug(location.hash.slice(1));
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching agents:', error);
-                // Optionally display a user-friendly message
-                document.getElementById('agents-grid').innerHTML = '<p>Failed to load agent data. Please try again later.</p>';
-            });
+    // Search filter
+    document.getElementById('search').addEventListener('input', e => {
+      const term = e.target.value.toLowerCase();
+      document.querySelectorAll('.card').forEach(card => {
+        const name = card.querySelector('h2').textContent.toLowerCase();
+        const loc  = card.querySelector('p').textContent.toLowerCase();
+        card.style.display = (name.includes(term) || loc.includes(term)) ? '' : 'none';
+      });
+    });
 
-        // Basic search filter
-        document.getElementById('search').addEventListener('input', e => {
-            const term = e.target.value.toLowerCase();
-            document.querySelectorAll('.card').forEach(card => {
-                const name = card.querySelector('h2').textContent.toLowerCase();
-                const loc = card.querySelector('p').textContent.toLowerCase();
-                card.style.display = (name.includes(term) || loc.includes(term)) ? '' : 'none';
-            });
-        });
-
-        // ADD AGENT FORM HANDLER
-        const form = document.querySelector('#add-agent-form');
-        const grid = document.querySelector('#agents-grid'); // Re-declare grid for this scope if needed, or use the global one
-
-        form.addEventListener('submit', async evt => {
-            evt.preventDefault();
-
-            const payload = {
-                name: form.name.value,
-                location: form.location.value,
-                full_address: form.full_address.value,
-                slug: form.slug.value,
-            };
-
-            const res = await fetch('https://tenant-advocate-api.vercel.app/api/agents', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
-
-            const data = await res.json();
-            if (!res.ok) {
-                return alert('Insert failed: ' + (data.error || res.statusText));
-            }
-
-            // render the newly inserted agent using the new function
-            const newCard = createAgentCard(data); // Assuming your API returns the full agent object including ratings
-            grid.appendChild(newCard);
-
-            form.reset();
-        });
-    </script>
+    // Add‐agent form
+    const form = document.getElementById('add-agent-form');
+    const grid = document.getElementById('agents-grid');
+    form.addEventListener('submit', async evt => {
+      evt.preventDefault();
+      const payload = {
+        name: form.name.value,
+        location: form.location.value,
+        full_address: form.full_address.value,
+        slug: form.slug.value,
+      };
+      const res = await fetch('https://tenant-advocate-api.vercel.app/api/agents', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok) return alert('Insert failed: ' + (data.error || res.statusText));
+      grid.appendChild(createAgentCard(data));
+      form.reset();
+    });
+  </script>
 </body>
 </html>
