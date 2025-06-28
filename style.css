@@ -69,3 +69,53 @@ header p  { font-size: 1rem;   }
 .badge.Low    { background: #28a745; } /* green */
 .badge.Medium { background: #ffc107; } /* amber */
 .badge.High   { background: #dc3545; } /* red */
+.modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto; /* 15% from the top and centered */
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%; /* Could be more or less, depending on screen size */
+      max-width: 600px; /* Max width for readability */
+      position: relative; /* For the close button */
+      border-radius: 8px;
+    }
+
+    .close-button {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+    }
+
+    .badge.Low { background-color: #4CAF50; } /* Green */
+    .badge.Medium { background-color: #FFC107; } /* Amber */
+    .badge.High { background-color: #F44336; } /* Red */
+    .badge.Unknown { background-color: #9E9E9E; } /* Grey for unknown */
