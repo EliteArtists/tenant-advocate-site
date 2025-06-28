@@ -31,7 +31,7 @@
 
     <div id="agent-detail-modal" class="modal">
     <div class="modal-content">
-      <span class="close-button">&times;</span>
+      <span class="close-button">×</span>
       <h2 id="detail-agent-name"></h2>
       <p id="detail-full-address"></p>
       <p>Google Rating: <span id="detail-google-rating"></span> ⭐ (<span id="detail-google-reviews"></span> reviews)</p>
@@ -59,13 +59,13 @@
       const slug            = agent.slug;
       const imageUrl        = agent.image_url || 'https://via.placeholder.com/300x200?text=No+Image';
       const googleScore     = parseFloat(agent.google_rating) || 0;
-      const trustpilotScore = parseFloat(agent.trustpilot_rating) || 0;
+      const googleReviewCount = parseInt(agent.google_review_count) || 0; // Ensure it's an integer
+      const trustpilotScore = parseFloat(agent.trustpilot_rating) || 0; // This will likely be 0 or null
 
       // --- UPDATED RISK LEVEL LOGIC ---
-      // Temporarily calculate risk only based on Google score since Trustpilot is not yet integrated
       let riskLevel;
-      if (googleScore === 0) { // If no Google rating, default to High or unknown
-        riskLevel = 'Unknown'; // Or 'High' if you prefer
+      if (googleScore === 0) {
+        riskLevel = 'Unknown';
       } else if (googleScore >= 4.0) {
         riskLevel = 'Low';
       } else if (googleScore >= 3.0) {
@@ -81,12 +81,12 @@
       card.innerHTML = `
         <img src="${imageUrl}" alt="${agent.name}">
         <h2>${agent.name}</h2>
-        <p>${agent.full_address || agent.location}</p>         <p>Google: ${googleScore.toFixed(1)} ⭐</p>
-        <span class="badge ${riskLevel}">${riskLevel}</span>
+        <p>${agent.full_address || agent.location || 'Address N/A'}</p>         <p>Reviews: ${googleReviewCount}</p>         <p>Google: ${googleScore.toFixed(1)} ⭐</p>
+        <p>Trustpilot: ${trustpilotScore.toFixed(1)} ⭐</p>         <span class="badge ${riskLevel}">${riskLevel}</span>
       `;
 
       // Attach click listener to show detail modal
-      card.addEventListener('click', () => {
+      card.addEventListener('click', () => { // 1b: Re-enabling click listener
         showAgentDetail(agent); // Pass the entire agent object to the detail function
       });
 
@@ -112,12 +112,14 @@
       document.getElementById('detail-full-address').textContent = agent.full_address || agent.location || 'Address not available';
       document.getElementById('detail-google-rating').textContent = (parseFloat(agent.google_rating) || 0).toFixed(1);
       document.getElementById('detail-google-reviews').textContent = agent.google_review_count || 0;
-      document.getElementById('detail-trustpilot-rating').textContent = (parseFloat(agent.trustpilot_rating) || 'N/A').toFixed(1);
+      // Ensure Trustpilot rating displays '0.0' or 'N/A' if null/0
+      document.getElementById('detail-trustpilot-rating').textContent = (parseFloat(agent.trustpilot_rating) || 0).toFixed(1);
 
       // Generate Google Maps link if place name and location are available
       const googleMapsLinkElement = document.getElementById('detail-google-map-link');
       if (agent.name) {
         const query = encodeURIComponent(`${agent.name} ${agent.full_address || agent.location || ''}`);
+        // Corrected Google Maps URL template
         const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
         googleMapsLinkElement.innerHTML = `Read Google reviews on <a href="${mapsUrl}" target="_blank">Google Maps</a>`;
       } else {
@@ -153,7 +155,8 @@
       const term = e.target.value.toLowerCase();
       document.querySelectorAll('.card').forEach(card => {
         const name = card.querySelector('h2').textContent.toLowerCase();
-        const loc  = card.querySelector('p').textContent.toLowerCase(); // This will now include full_address
+        // This will now include full_address for search
+        const loc  = card.querySelector('p').textContent.toLowerCase();
         card.style.display = (name.includes(term) || loc.includes(term)) ? '' : 'none';
       });
     });
@@ -190,10 +193,5 @@
       form.reset();
     });
   </script>
-
-    <style>
-   
-
-  </style>
 </body>
 </html>
