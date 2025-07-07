@@ -81,14 +81,12 @@
       card.innerHTML = `
         <img src="${imageUrl}" alt="${agent.name}">
         <h2>${agent.name}</h2>
-        <p>${agent.full_address || agent.location || 'Address N/A'}</p>
-        <p>Reviews: ${googleReviewCount}</p>         <p>Google: ${googleScore.toFixed(1)} ⭐</p>
-        <p>Trustpilot: ${trustpilotScore.toFixed(1)} ⭐</p>
-        <span class="badge ${riskLevel}">${riskLevel}</span>
+        <p>${agent.full_address || agent.location || 'Address N/A'}</p>         <p>Reviews: ${googleReviewCount}</p>         <p>Google: ${googleScore.toFixed(1)} ⭐</p>
+        <p>Trustpilot: ${trustpilotScore.toFixed(1)} ⭐</p>         <span class="badge ${riskLevel}">${riskLevel}</span>
       `;
 
       // Attach click listener to show detail modal
-      card.addEventListener('click', () => {
+      card.addEventListener('click', () => { // 1b: Re-enabling click listener
         showAgentDetail(agent); // Pass the entire agent object to the detail function
       });
 
@@ -121,7 +119,7 @@
       const googleMapsLinkElement = document.getElementById('detail-google-map-link');
       if (agent.name) {
         const query = encodeURIComponent(`${agent.name} ${agent.full_address || agent.location || ''}`);
-        // CORRECTED: Proper Google Maps search URL with api=1 parameter
+        // Corrected Google Maps URL template
         const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
         googleMapsLinkElement.innerHTML = `Read Google reviews on <a href="${mapsUrl}" target="_blank">Google Maps</a>`;
       } else {
