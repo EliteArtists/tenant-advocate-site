@@ -133,24 +133,33 @@
         }
 
         // Fetch agent data and render cards
-        fetch('https://tenant-advocate-api.vercel.app/api/agents')
-            .then(res => res.json())
-            .then(data => {
-                const grid = document.getElementById('agents-grid');
-                data.forEach(agent => {
-                    const card = createAgentCard(agent);
-                    grid.appendChild(card);
-                });
+fetch('https://tenant-advocate-api.vercel.app/api/agents')
+    .then(res => res.json())
+    .then(data => {
+        // --- START OF NEW LOGS ---
+        console.log('🚀 raw agent payload sample:', data[0]); // Log the first agent object
+        if (data.length > 1) { // Log a second one if available for comparison
+            console.log('🚀 raw agent payload sample 2:', data[1]);
+        }
+        // Also, let's confirm your data structure for what is in the "agent" object passed to createAgentCard
+        console.log('🚀 Agent object passed to createAgentCard (first agent):', data[0]);
+        // --- END OF NEW LOGS ---
 
-                // After all initial cards are rendered, check for hash and apply filter
-                if (location.hash) {
-                    filterBySlug(location.hash.slice(1));
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching agents:', error);
-                document.getElementById('agents-grid').innerHTML = '<p>Failed to load agent data. Please try again later.</p>';
-            });
+        const grid = document.getElementById('agents-grid');
+        data.forEach(agent => {
+            const card = createAgentCard(agent);
+            grid.appendChild(card);
+        });
+
+        // After all initial cards are rendered, check for hash and apply filter
+        if (location.hash) {
+            filterBySlug(location.hash.slice(1));
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching agents:', error);
+        document.getElementById('agents-grid').innerHTML = '<p>Failed to load agent data. Please try again later.</p>';
+    });
 
         // Basic search filter
         document.getElementById('search').addEventListener('input', e => {
