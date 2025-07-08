@@ -1,197 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tenant Advocate</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tenant Advocate</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Tenant Advocate</h1>
-    <p>Your guide to the safest letting agents in the UK</p>
-  </header>
+    <header>
+        <h1>Tenant Advocate</h1>
+        <p>Your guide to the safest letting agents in the UK</p>
+    </header>
 
-  <div class="search-container">
-    <input type="text" id="search" placeholder="Search agents…">
-  </div>
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search agents…">
+    </div>
 
-  <form id="add-agent-form" style="margin:1em 0;">
-    <input name="name"         placeholder="Name"        required>
-    <input name="location"     placeholder="Location"    required>
-    <input name="full_address" placeholder="Full address"required>
-    <input name="slug"         placeholder="Slug (url-safe)" required>
-    <button type="submit">Add Agent</button>
-</form>
+    <form id="add-agent-form" style="margin:1em 0;">
+        <input name="name"           placeholder="Name"          required>
+        <input name="location"       placeholder="Location"      required>
+        <input name="full_address"   placeholder="Full address"  required>
+        <input name="slug"           placeholder="Slug (url-safe)" required>
+        <button type="submit">Add Agent</button>
+    </form>
 
-  <main>
-    <div class="grid" id="agents-grid">
-          </div>
-  </main>
+    <main>
+        <div class="grid" id="agents-grid">
+            </div>
+    </main>
 
-    <div id="agent-detail-modal" class="modal">
-    <div class="modal-content">
-      <span class="close-button">×</span>
-      <h2 id="detail-agent-name"></h2>
-      <p id="detail-full-address"></p>
-      <p>Google Rating: <span id="detail-google-rating"></span> ⭐ (<span id="detail-google-reviews"></span> reviews)</p>
-      <p>Trustpilot Rating: <span id="detail-trustpilot-rating">N/A</span> ⭐</p>
-            <div id="detail-reviews-section" style="margin-top: 20px;">
-        <h3>Reviews</h3>
-        <p>Actual Google review text cannot be displayed directly due to API terms.</p>
-        <p id="detail-google-map-link"></p>
-        <p>Trustpilot reviews not yet integrated.</p>
-      </div>
-    </div>
-  </div>
+    <div id="agent-detail-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">×</span>
+            <h2 id="detail-agent-name"></h2>
+            <p id="detail-full-address"></p>
+            <p>Google Rating: <span id="detail-google-rating"></span> ⭐ (<span id="detail-google-reviews"></span> reviews)</p>
+            <p>Trustpilot Rating: <span id="detail-trustpilot-rating">N/A</span> ⭐</p>
+            <div id="detail-reviews-section" style="margin-top: 20px;">
+                <h3>Reviews</h3>
+                <p>Actual Google review text cannot be displayed directly due to API terms.</p>
+                <p id="detail-google-map-link"></p>
+                <p>Trustpilot reviews not yet integrated.</p>
+            </div>
+        </div>
+    </div>
 
-  <script>
-    // Utility function to filter cards by slug
-    function filterBySlug(slug) {
-      document.querySelectorAll('.card').forEach(card => {
-        card.style.display = (card.dataset.slug === slug) ? '' : 'none';
-      });
-    }
+    <script>
+        // Utility function to filter cards by slug
+        function filterBySlug(slug) {
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.display = (card.dataset.slug === slug) ? '' : 'none';
+            });
+        }
 
-    // Function to create and append an agent card
-    function createAgentCard(agent) {
-      // Parse ratings (fall back to 0 if missing/null)
-      const slug            = agent.slug;
-      const imageUrl        = agent.image_url || 'https://via.placeholder.com/300x200?text=No+Image';
-      const googleScore     = parseFloat(agent.google_rating) || 0;
-      const googleReviewCount = parseInt(agent.google_review_count) || 0; // Ensure it's an integer
-      const trustpilotScore = parseFloat(agent.trustpilot_rating) || 0; // This will likely be 0 or null
+        // Function to create and append an agent card
+        function createAgentCard(agent) {
+            // Parse ratings (fall back to 0 if missing/null)
+            const slug            = agent.slug;
+            const imageUrl        = agent.image_url || 'https://via.placeholder.com/300x200?text=No+Image';
+            const googleScore     = parseFloat(agent.google_rating) || 0;
+            const googleReviewCount = parseInt(agent.google_review_count) || 0; // Ensure it's an integer
+            const trustpilotScore = parseFloat(agent.trustpilot_rating) || 0; // This will likely be 0 or null
 
-      // --- UPDATED RISK LEVEL LOGIC ---
-      let riskLevel;
-      if (googleScore === 0) {
-        riskLevel = 'Unknown';
-      } else if (googleScore >= 4.0) {
-        riskLevel = 'Low';
-      } else if (googleScore >= 3.0) {
-        riskLevel = 'Medium';
-      } else {
-        riskLevel = 'High';
-      }
+            // --- UPDATED RISK LEVEL LOGIC ---
+            let riskLevel;
+            if (googleScore === 0) {
+                riskLevel = 'Unknown';
+            } else if (googleScore >= 4.0) {
+                riskLevel = 'Low';
+            } else if (googleScore >= 3.0) {
+                riskLevel = 'Medium';
+            } else {
+                riskLevel = 'High';
+            }
 
-      // build card
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.setAttribute('data-slug', slug);
-      card.innerHTML = `
-        <img src="${imageUrl}" alt="${agent.name}">
-        <h2>${agent.name}</h2>
-        <p>${agent.full_address || agent.location || 'Address N/A'}</p>         <p>Reviews: ${googleReviewCount}</p>         <p>Google: ${googleScore.toFixed(1)} ⭐</p>
-        <p>Trustpilot: ${trustpilotScore.toFixed(1)} ⭐</p>         <span class="badge ${riskLevel}">${riskLevel}</span>
-      `;
+            // build card
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.setAttribute('data-slug', slug);
+            card.innerHTML = `
+                <img src="${imageUrl}" alt="${agent.name}">
+                <h2>${agent.name}</h2>
+                <p>${agent.full_address || agent.location || 'Address N/A'}</p>
+                <p>Reviews: ${googleReviewCount}</p>
+                <p>Google: ${googleScore.toFixed(1)} ⭐</p>
+                <p>Trustpilot: ${trustpilotScore.toFixed(1)} ⭐</p>
+                <span class="badge ${riskLevel}">${riskLevel}</span>
+            `;
 
-      // Attach click listener to show detail modal
-      card.addEventListener('click', () => { // 1b: Re-enabling click listener
-        showAgentDetail(agent); // Pass the entire agent object to the detail function
-      });
+            // Attach click listener to show detail modal
+            card.addEventListener('click', () => {
+                showAgentDetail(agent); // Pass the entire agent object to the detail function
+            });
 
-      return card;
-    }
+            return card;
+        }
 
-    // Function to show agent details in a modal
-    const agentDetailModal = document.getElementById('agent-detail-modal');
-    const closeButton = document.querySelector('.close-button');
+        // Function to show agent details in a modal
+        const agentDetailModal = document.getElementById('agent-detail-modal');
+        const closeButton = document.querySelector('.close-button');
 
-    closeButton.addEventListener('click', () => {
-      agentDetailModal.style.display = 'none';
-    });
+        closeButton.addEventListener('click', () => {
+            agentDetailModal.style.display = 'none';
+        });
 
-    window.addEventListener('click', (event) => {
-      if (event.target == agentDetailModal) {
-        agentDetailModal.style.display = 'none';
-      }
-    });
+        window.addEventListener('click', (event) => {
+            if (event.target == agentDetailModal) {
+                agentDetailModal.style.display = 'none';
+            }
+        });
 
-    function showAgentDetail(agent) {
-      document.getElementById('detail-agent-name').textContent = agent.name;
-      document.getElementById('detail-full-address').textContent = agent.full_address || agent.location || 'Address not available';
-      document.getElementById('detail-google-rating').textContent = (parseFloat(agent.google_rating) || 0).toFixed(1);
-      document.getElementById('detail-google-reviews').textContent = agent.google_review_count || 0;
-      // Ensure Trustpilot rating displays '0.0' or 'N/A' if null/0
-      document.getElementById('detail-trustpilot-rating').textContent = (parseFloat(agent.trustpilot_rating) || 0).toFixed(1);
+        function showAgentDetail(agent) {
+            document.getElementById('detail-agent-name').textContent = agent.name;
+            document.getElementById('detail-full-address').textContent = agent.full_address || agent.location || 'Address not available';
+            document.getElementById('detail-google-rating').textContent = (parseFloat(agent.google_rating) || 0).toFixed(1);
+            document.getElementById('detail-google-reviews').textContent = agent.google_review_count || 0;
+            // Ensure Trustpilot rating displays '0.0' or 'N/A' if null/0
+            document.getElementById('detail-trustpilot-rating').textContent = (parseFloat(agent.trustpilot_rating) || 0).toFixed(1);
 
-      // Generate Google Maps link if place name and location are available
-      const googleMapsLinkElement = document.getElementById('detail-google-map-link');
-      if (agent.name) {
-        const query = encodeURIComponent(`${agent.name} ${agent.full_address || agent.location || ''}`);
-        // Corrected Google Maps URL template
-        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
-        googleMapsLinkElement.innerHTML = `Read Google reviews on <a href="${mapsUrl}" target="_blank">Google Maps</a>`;
-      } else {
-        googleMapsLinkElement.textContent = '';
-      }
+            // Generate Google Maps link if place name and location are available
+            const googleMapsLinkElement = document.getElementById('detail-google-map-link');
+            if (agent.name) {
+                const query = encodeURIComponent(`${agent.name} ${agent.full_address || agent.location || ''}`);
+                // CORRECTED: Proper Google Maps search URL with api=1 parameter and 'query='
+                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`; // This is the standard correct URL format
+                googleMapsLinkElement.innerHTML = `Read Google reviews on <a href="${mapsUrl}" target="_blank">Google Maps</a>`;
+            } else {
+                googleMapsLinkElement.textContent = '';
+            }
 
-      agentDetailModal.style.display = 'block';
-    }
+            agentDetailModal.style.display = 'block';
+        }
 
+        // Fetch agent data and render cards
+        fetch('https://tenant-advocate-api.vercel.app/api/agents')
+            .then(res => res.json())
+            .then(data => {
+                const grid = document.getElementById('agents-grid');
+                data.forEach(agent => {
+                    const card = createAgentCard(agent);
+                    grid.appendChild(card);
+                });
 
-    // Fetch agent data and render cards
-    fetch('https://tenant-advocate-api.vercel.app/api/agents')
-  .then(res => res.json())
-  .then(data => {
-    const grid = document.getElementById('agents-grid');
-    data.forEach(agent => {
-      const card = createAgentCard(agent);
-      grid.appendChild(card);
-    });
+                // After all initial cards are rendered, check for hash and apply filter
+                if (location.hash) {
+                    filterBySlug(location.hash.slice(1));
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching agents:', error);
+                document.getElementById('agents-grid').innerHTML = '<p>Failed to load agent data. Please try again later.</p>';
+            });
 
-    // After all initial cards are rendered, check for hash and apply filter
-    if (location.hash) {
-      filterBySlug(location.hash.slice(1));
-    }
-  })
-  .catch(error => {
-    console.error('Error fetching agents:', error);
-    document.getElementById('agents-grid').innerHTML = '<p>Failed to load agent data. Please try again later.</p>';
-  });
+        // Basic search filter
+        document.getElementById('search').addEventListener('input', e => {
+            const term = e.target.value.toLowerCase();
+            document.querySelectorAll('.card').forEach(card => {
+                const name = card.querySelector('h2').textContent.toLowerCase();
+                // This will now include full_address for search
+                const loc = card.querySelector('p').textContent.toLowerCase();
+                card.style.display = (name.includes(term) || loc.includes(term)) ? '' : 'none';
+            });
+        });
 
-    // Basic search filter
-    document.getElementById('search').addEventListener('input', e => {
-      const term = e.target.value.toLowerCase();
-      document.querySelectorAll('.card').forEach(card => {
-        const name = card.querySelector('h2').textContent.toLowerCase();
-        // This will now include full_address for search
-        const loc  = card.querySelector('p').textContent.toLowerCase();
-        card.style.display = (name.includes(term) || loc.includes(term)) ? '' : 'none';
-      });
-    });
-    
-// add agent form handler (keep this as is)
-    const form = document.querySelector('#add-agent-form');
-    const grid = document.querySelector('#agents-grid');
+        // add agent form handler (keep this as is)
+        const form = document.querySelector('#add-agent-form');
+        const grid = document.querySelector('#agents-grid');
 
-    form.addEventListener('submit', async evt => {
-      evt.preventDefault();
+        form.addEventListener('submit', async evt => {
+            evt.preventDefault();
 
-      const payload = {
-        name:         form.name.value,
-        location:     form.location.value,
-        full_address: form.full_address.value,
-        slug:         form.slug.value,
-      };
+            const payload = {
+                name: form.name.value,
+                location: form.location.value,
+                full_address: form.full_address.value,
+                slug: form.slug.value,
+            };
 
-      const res = await fetch('https://tenant-advocate-api.vercel.app/api/agents', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload),
-      });
+            const res = await fetch('https://tenant-advocate-api.vercel.app/api/agents', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
 
-      const data = await res.json();
-      if (!res.ok) {
-        return alert('Insert failed: ' + (data.error || res.statusText));
-      }
+            const data = await res.json();
+            if (!res.ok) {
+                return alert('Insert failed: ' + (data.error || res.statusText));
+            }
 
-      // Assuming your POST API returns the full agent object with new data
-      const newCard = createAgentCard(data);
-      grid.appendChild(newCard);
+            // Assuming your POST API returns the full agent object with new data
+            const newCard = createAgentCard(data);
+            grid.appendChild(newCard);
 
-      form.reset();
-    });
-  </script>
+            form.reset();
+        });
+    </script>
 </body>
 </html>
