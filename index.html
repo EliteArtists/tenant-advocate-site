@@ -141,7 +141,7 @@
             if (agent.name) {
                 const query = encodeURIComponent(`${agent.name} ${agent.full_address || agent.location || ''}`);
                 // CORRECTED: Proper Google Maps search URL using 'q=' parameter for direct search
-                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`; // This is the standard correct URL format
+                const mapsUrl = `https://www.google.com/maps/search/`;
                 googleMapsLinkElement.innerHTML = `Read Google reviews on <a href="${mapsUrl}" target="_blank">Google Maps</a>`;
             } else {
                 googleMapsLinkElement.textContent = '';
