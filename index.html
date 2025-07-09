@@ -96,41 +96,45 @@
             return card;
         }
 
-        // Function to show agent details in a modal
-        const agentDetailModal = document.getElementById('agent-detail-modal');
-        const closeButton = document.querySelector('.close-button');
-
-        closeButton.addEventListener('click', () => {
-            agentDetailModal.style.display = 'none';
-        });
-
-        window.addEventListener('click', (event) => {
-            if (event.target == agentDetailModal) {
-                agentDetailModal.style.display = 'none';
-            }
-        });
-
         function showAgentDetail(agent) {
-            document.getElementById('detail-agent-name').textContent = agent.name;
-            document.getElementById('detail-full-address').textContent = agent.full_address || agent.location || 'Address not available';
-            document.getElementById('detail-google-rating').textContent = (parseFloat(agent.google_rating) || 0).toFixed(1);
-            document.getElementById('detail-google-reviews').textContent = agent.google_review_count || 0;
-            // Ensure Trustpilot rating displays '0.0' or 'N/A' if null/0
-            document.getElementById('detail-trustpilot-rating').textContent = (parseFloat(agent.trustpilot_rating) || 0).toFixed(1);
+    document.getElementById('detail-agent-name').textContent = agent.name;
+    document.getElementById('detail-full-address').textContent = agent.full_address || agent.location || 'Address not available';
+    document.getElementById('detail-google-rating').textContent = (parseFloat(agent.google_rating) || 0).toFixed(1);
+    document.getElementById('detail-google-reviews').textContent = agent.google_review_count || 0;
+    document.getElementById('detail-trustpilot-rating').textContent = (parseFloat(agent.trustpilot_rating) || 0).toFixed(1);
 
-            // Generate Google Maps link if place name and location are available
-            const googleMapsLinkElement = document.getElementById('detail-google-map-link');
-            if (agent.name) {
-                const query = encodeURIComponent(`${agent.name} ${agent.full_address || agent.location || ''}`);
-                // CORRECTED: Proper Google Maps search URL with api=1 parameter and 'query='
-                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`; // This is the standard correct URL format
-                googleMapsLinkElement.innerHTML = `Read Google reviews on <a href="${mapsUrl}" target="_blank">Google Maps</a>`;
-            } else {
-                googleMapsLinkElement.textContent = '';
-            }
+    // Get the reviews section element
+    const detailReviewsSection = document.getElementById('detail-reviews-section');
+    
+    // Clear previous dynamic content
+    detailReviewsSection.innerHTML = `
+        <h3>Reviews</h3>
+        <p>Actual Google review text cannot be displayed directly due to API terms.</p>
+        <p id="detail-google-map-link"></p>
+        <p>Trustpilot reviews not yet integrated.</p>
+    `; // Re-add standard text
 
-            agentDetailModal.style.display = 'block';
-        }
+    // Add website link if available
+    if (agent.website_url) {
+        const websiteLink = document.createElement('p');
+        websiteLink.innerHTML = `Website: <a href="${agent.website_url}" target="_blank">${agent.website_url}</a>`;
+        detailReviewsSection.insertBefore(websiteLink, detailReviewsSection.firstChild); // Add before existing review text
+    }
+
+    // Generate Google Maps link if place name and location are available
+    const googleMapsLinkElement = document.getElementById('detail-google-map-link');
+    if (agent.name) {
+        const query = encodeURIComponent(`${agent.name} ${agent.full_address || agent.location || ''}`);
+        // Corrected Google Maps search URL using 'q=' parameter for direct search
+        // Note: I'm making sure this is a plain Google Maps URL, not the content.google.com one.
+        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
+        googleMapsLinkElement.innerHTML = `Read Google reviews on <a href="${mapsUrl}" target="_blank">Google Maps</a>`;
+    } else {
+        googleMapsLinkElement.textContent = '';
+    }
+
+    agentDetailModal.style.display = 'block';
+}
 
         // Fetch agent data and render cards
 fetch('https://tenant-advocate-api.vercel.app/api/agents')
