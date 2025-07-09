@@ -96,45 +96,68 @@
             return card;
         }
 
-        // Function to show agent details in a modal
-        const agentDetailModal = document.getElementById('agent-detail-modal');
-        const closeButton = document.querySelector('.close-button');
-
-        closeButton.addEventListener('click', () => {
-            agentDetailModal.style.display = 'none';
-        });
-
-        window.addEventListener('click', (event) => {
-            if (event.target == agentDetailModal) {
-                agentDetailModal.style.display = 'none';
-            }
-        });
-
         function showAgentDetail(agent) {
-            document.getElementById('detail-agent-name').textContent = agent.name;
-            document.getElementById('detail-full-address').textContent = agent.full_address || agent.location || 'Address not available';
-            document.getElementById('detail-google-rating').textContent = (parseFloat(agent.google_rating) || 0).toFixed(1);
-            document.getElementById('detail-google-reviews').textContent = agent.google_review_count || 0;
-            // Ensure Trustpilot rating displays '0.0' or 'N/A' if null/0
-            document.getElementById('detail-trustpilot-rating').textContent = (parseFloat(agent.trustpilot_rating) || 0).toFixed(1);
+            console.log('Clicked agent:', agent); // Log the agent object passed
 
-            // Get the reviews section element
+            const detailAgentName = document.getElementById('detail-agent-name');
+            const detailFullAddress = document.getElementById('detail-full-address');
+            const detailGoogleRating = document.getElementById('detail-google-rating');
+            const detailGoogleReviews = document.getElementById('detail-google-reviews');
+            const detailTrustpilotRating = document.getElementById('detail-trustpilot-rating');
             const detailReviewsSection = document.getElementById('detail-reviews-section');
-            
-            // Clear previous dynamic content
+            const googleMapsLinkElement = document.getElementById('detail-google-map-link');
+
+            // Null checks for elements (though they should exist)
+            if (!detailAgentName || !detailFullAddress || !detailGoogleRating || !detailGoogleReviews || !detailTrustpilotRating || !detailReviewsSection || !googleMapsLinkElement) {
+                console.error("Error: One or more modal elements not found in the DOM.");
+                return; // Stop function if elements are missing
+            }
+
+
+            detailAgentName.textContent = agent.name || 'N/A';
+            detailFullAddress.textContent = agent.full_address || agent.location || 'Address not available';
+            detailGoogleRating.textContent = (parseFloat(agent.google_rating) || 0).toFixed(1);
+            detailGoogleReviews.textContent = agent.google_review_count || 0;
+            detailTrustpilotRating.textContent = (parseFloat(agent.trustpilot_rating) || 0).toFixed(1);
+
+            // Clear previous dynamic content and re-add static text
             detailReviewsSection.innerHTML = `
                 <h3>Reviews</h3>
                 <p>Actual Google review text cannot be displayed directly due to API terms.</p>
                 <p id="detail-google-map-link"></p>
                 <p>Trustpilot reviews not yet integrated.</p>
-            `; // Re-add standard text
+            `;
 
             // Add website link if available
             if (agent.website_url) {
                 const websiteLink = document.createElement('p');
                 websiteLink.innerHTML = `Website: <a href="${agent.website_url}" target="_blank">${agent.website_url}</a>`;
-                detailReviewsSection.insertBefore(websiteLink, detailReviewsSection.firstChild); // Add before existing review text
+                detailReviewsSection.insertBefore(websiteLink, detailReviewsSection.firstChild);
             }
+
+            // Generate Google Maps link
+            if (agent.name) {
+                const query = encodeURIComponent(`${agent.name} ${agent.full_address || agent.location || ''}`);
+                // **THIS IS THE CRITICAL FIX for mapsUrl:**
+                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`; 
+                
+                // Re-select googleMapsLinkElement if it was cleared by innerHTML
+                const currentGoogleMapsLinkElement = document.getElementById('detail-google-map-link');
+                if (currentGoogleMapsLinkElement) {
+                   currentGoogleMapsLinkElement.innerHTML = `Read Google reviews on <a href="${mapsUrl}" target="_blank">Google Maps</a>`;
+                } else {
+                   console.error("Could not find detail-google-map-link after clearing innerHTML.");
+                }
+                
+            } else {
+                googleMapsLinkElement.textContent = '';
+            }
+
+            // Finally, attempt to display the modal
+            console.log("Attempting to display modal...");
+            agentDetailModal.style.display = 'block';
+            console.log("Modal display command issued.");
+        }
 
             // Generate Google Maps link if place name and location are available
             const googleMapsLinkElement = document.getElementById('detail-google-map-link');
