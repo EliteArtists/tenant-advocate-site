@@ -160,7 +160,7 @@ header p  { font-size: 1rem;   }
 .burger-icon div {
     width: 100%;
     height: 3px;
-    background-color: white; /* Bars will be white on red header */
+    background-color: #333; /* Bars will be white on red header */
     border-radius: 2px;
     transition: all 0.3s ease;
 }
