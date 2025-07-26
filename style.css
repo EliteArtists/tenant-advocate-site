@@ -69,36 +69,55 @@ header p  { font-size: 1rem;   }
 .badge.Low    { background: #28a745; } /* green */
 .badge.Medium { background: #ffc107; } /* amber */
 .badge.High   { background: #dc3545; } /* red */
+/* Modal backdrop and positioning */
 .modal {
-      display: none; /* Hidden by default */
-      position: fixed; /* Stay in place */
-      z-index: 1; /* Sit on top */
-      left: 0;
-      top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    }
+  display: none;               /* Keep hidden by default */
+  position: fixed;             /* Position relative to the viewport */
+  top: 0;
+  left: 0;
+  width: 100vw;                /* Cover the entire viewport width */
+  height: 100vh;               /* Cover the entire viewport height */
+  background: rgba(0, 0, 0, 0.6); /* Semi-transparent black backdrop */
+  display: flex;               /* Use flexbox to center content */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;               /* Ensure it's on top of everything */
+  overflow: auto;              /* Allow scrolling if content is too large */
+}
 
-    .modal-content {
-      background-color: #fefefe;
-      margin: 15% auto; /* 15% from the top and centered */
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%; /* Could be more or less, depending on screen size */
-      max-width: 600px; /* Max width for readability */
-      position: relative; /* For the close button */
-      border-radius: 8px;
-    }
+/* Modal content box */
+.modal-content {
+  background-color: #fefefe;   /* White background for the content */
+  margin: auto;                /* Auto margin for basic centering (though flexbox handles it better here) */
+  padding: 2em;
+  border: 1px solid #888;
+  width: 80%;                  /* Adjust content width as needed */
+  max-width: 600px;            /* Max width for larger screens */
+  border-radius: 8px;          /* Slightly rounded corners */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Subtle shadow */
+  position: relative;          /* Needed for close button positioning */
+  max-height: 90vh;            /* Limit height to viewport height */
+  overflow-y: auto;            /* Allow scrolling within modal content if it overflows */
+}
 
-    .close-button {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+/* Close button style */
+.close-button {
+  color: #aaa;
+  float: right; /* Position to the right */
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute; /* Absolute position relative to modal-content */
+  top: 10px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
 
     .close-button:hover,
     .close-button:focus {
