@@ -136,16 +136,29 @@
                 detailReviewsSection.insertBefore(websiteLink, detailReviewsSection.firstChild); // Add before existing review text
             }
 
-            // Generate Google Maps link if place name and location are available
+            // Generate Google Maps link
             const googleMapsLinkElement = document.getElementById('detail-google-map-link');
+            let mapsLinkHtml = ''; // Initialize as empty string
+
+            // Construct the query string from agent data
+            const agentQueryParts = [];
             if (agent.name) {
-                const query = encodeURIComponent(`${agent.name} ${agent.full_address || agent.location || ''}`);
-                // CORRECTED: Proper Google Maps search URL using 'q=' parameter for direct search
-                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
-                googleMapsLinkElement.innerHTML = `Read Google reviews on <a href="${mapsUrl}" target="_blank">Google Maps</a>`;
-            } else {
-                googleMapsLinkElement.textContent = '';
+                agentQueryParts.push(agent.name);
             }
+            if (agent.full_address) {
+                agentQueryParts.push(agent.full_address);
+            } else if (agent.location) {
+                agentQueryParts.push(agent.location);
+            }
+
+            if (agentQueryParts.length > 0) {
+                const query = encodeURIComponent(agentQueryParts.join(' '));
+                // Correct Google Maps search URL with API parameter
+                const mapsUrl = `http://maps.google.com/?api=1&query=${query}`;
+                mapsLinkHtml = `Read Google reviews on <a href="${mapsUrl}" target="_blank">Google Maps</a>`;
+            }
+
+            googleMapsLinkElement.innerHTML = mapsLinkHtml;
 
             agentDetailModal.style.display = 'block';
         }
