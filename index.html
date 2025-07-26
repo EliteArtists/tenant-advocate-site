@@ -132,6 +132,41 @@
             }
         });
 
+        // BURGER MENU JAVASCRIPT STARTS HERE
+        const burgerIcon = document.getElementById('burger-icon');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+
+        burgerIcon.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('show');
+        });
+
+        // Close dropdown if clicked outside
+        window.addEventListener('click', (event) => {
+            if (!event.target.closest('.burger-menu-container') && dropdownMenu.classList.contains('show')) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+        // City Filter Logic
+        document.querySelectorAll('.city-filter').forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent default link behavior (page jump)
+                const city = event.target.dataset.city;
+                const cards = document.querySelectorAll('.card');
+
+                cards.forEach(card => {
+                    const fullAddress = card.querySelector('p:nth-of-type(1)').textContent; // Get the address from the card
+                    if (city === 'all' || fullAddress.toLowerCase().includes(city.toLowerCase())) {
+                        card.style.display = ''; // Show
+                    } else {
+                        card.style.display = 'none'; // Hide
+                    }
+                });
+                dropdownMenu.classList.remove('show'); // Hide menu after selection
+            });
+        });
+        // BURGER MENU JAVASCRIPT ENDS HERE
+
         function showAgentDetail(agent) {
             document.getElementById('detail-agent-name').textContent = agent.name;
             document.getElementById('detail-full-address').textContent = agent.full_address || agent.location || 'Address not available';
