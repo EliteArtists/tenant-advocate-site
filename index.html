@@ -57,7 +57,13 @@
         function createAgentCard(agent) {
             // Parse ratings (fall back to 0 if missing/null)
             const slug            = agent.slug;
-            const imageUrl        = agent.image_url || 'https://via.placeholder.com/300x200?text=No+Image';
+            const Maps_API_KEY = 'AIzaSyDiqsCUUnW3TcxfwBwFsOQbxThe2OxcnvE'; // <<< YOUR API KEY HERE!
+            let imageUrl = agent.image_url || 'https://via.placeholder.com/300x200?text=No+Image';
+
+            // If it's a Google Place Photo URL and we have an API key, append the key
+            if (imageUrl.startsWith('https://maps.googleapis.com/maps/api/place/photo') && Maps_API_KEY) {
+                imageUrl = `${imageUrl}&key=${Maps_API_KEY}`;
+            }
             const googleScore     = parseFloat(agent.google_rating) || 0;
             const googleReviewCount = parseInt(agent.google_review_count) || 0; // Ensure it's an integer
             const trustpilotScore = parseFloat(agent.trustpilot_rating) || 0; // This will likely be 0 or null
