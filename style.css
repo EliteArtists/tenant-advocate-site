@@ -203,3 +203,9 @@ header p  { font-size: 1rem;   }
         right: 0.5rem;
     }
 }
+
+.header-logo {
+    max-width: 250px; /* Adjust this value as needed to control logo size */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 0.5rem;
+}
