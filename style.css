@@ -205,7 +205,7 @@ header p  { font-size: 1rem;   }
 }
 
 .header-logo {
-    max-width: 200px; /* Try a smaller width */
+    max-width: 220px; /* Try a smaller width */
     height: 50px; /* Give it a fixed height */
     object-fit: contain; /* Ensure the image scales down without cropping */
     margin-bottom: 0.5rem;
