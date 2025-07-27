@@ -27,10 +27,7 @@
     </div>
     </header>
 
-    <div class="search-container">
-        <input type="text" id="search" placeholder="Search agents…">
-    </div>
-
+    
     <form id="add-agent-form" style="margin:1em 0;">
         <input name="name"           placeholder="Name"          required>
         <input name="location"       placeholder="Location"      required>
@@ -38,6 +35,10 @@
         <input name="slug"           placeholder="Slug (url-safe)" required>
         <button type="submit">Add Agent</button>
     </form>
+
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search agents…">
+    </div>
 
     <main>
         <div class="grid" id="agents-grid">
