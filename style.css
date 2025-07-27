@@ -212,5 +212,5 @@ header p  { font-size: 1rem;   }
     object-fit: contain;
     margin-bottom: 0.5rem;
     /* For vertical nudging: */
-    margin-top: -5px; /* Start at 0, then try negative for up, positive for down */
+    margin-top: -10px; /* Start at 0, then try negative for up, positive for down */
 }
