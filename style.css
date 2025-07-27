@@ -207,8 +207,10 @@ header p  { font-size: 1rem;   }
 }
 
 .header-logo {
-    max-width: 400px; /* Try a smaller width */
-    height: 200px; /* Give it a fixed height */
-    object-fit: contain; /* Ensure the image scales down without cropping */
+    max-width: 400px; /* Adjust size later if needed */
+    height: 200px; /* Adjust size later if needed */
+    object-fit: contain;
     margin-bottom: 0.5rem;
+    /* For vertical nudging: */
+    margin-top: -5px; /* Start at 0, then try negative for up, positive for down */
 }
