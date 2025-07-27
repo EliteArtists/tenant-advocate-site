@@ -258,3 +258,30 @@ header p  { font-size: 1rem;   }
         margin: 0.5rem auto; /* Center stacked inputs */
     }
 }
+
+/* Scrolling Text Marquee Styling */
+.marquee-container {
+    width: 100%;
+    overflow: hidden; /* Hide anything outside this box */
+    background-color: #eee; /* Light grey background for the marquee bar */
+    padding: 0.75rem 0; /* Vertical padding */
+    white-space: nowrap; /* Keep text on a single line */
+    box-sizing: border-box; /* Include padding in element's total width */
+    margin-top: 1rem; /* Add some space above it */
+    margin-bottom: 1rem; /* Add some space below it */
+}
+
+.marquee-text {
+    display: inline-block; /* Essential for animation */
+    padding-left: 100%; /* Start the text off-screen to the right */
+    animation: marquee 30s linear infinite; /* Animation properties */
+    font-size: 1rem;
+    color: #333; /* Dark text for readability */
+    font-weight: bold;
+}
+
+/* Keyframe animation for scrolling text */
+@keyframes marquee {
+    0%   { transform: translate(0, 0); }
+    100% { transform: translate(-100%, 0); } /* Scrolls from right to left */
+}
