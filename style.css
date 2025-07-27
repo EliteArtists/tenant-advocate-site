@@ -157,6 +157,9 @@ header p  { font-size: 1rem;   }
     flex-direction: column;
     justify-content: space-around;
     cursor: pointer;
+    /* For nudging: */
+    margin-top: 5px; /* Adjust this for UP (-ve) or DOWN (+ve) */
+    margin-right: 10px; /* Adjust this for LEFT (+ve) or RIGHT (-ve) */
 }
 
 .burger-icon div {
