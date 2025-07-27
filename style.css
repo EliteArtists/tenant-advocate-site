@@ -263,7 +263,7 @@ header p  { font-size: 1rem;   }
 .marquee-container {
     width: 100%;
     overflow: hidden; /* Hide anything outside this box */
-    background-color: #eee; /* Light grey background for the marquee bar */
+    background-color: #f9f9f9; /* Light grey background for the marquee bar */
     padding: 0.75rem 0; /* Vertical padding */
     white-space: nowrap; /* Keep text on a single line */
     box-sizing: border-box; /* Include padding in element's total width */
