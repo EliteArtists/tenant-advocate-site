@@ -290,6 +290,7 @@ header p  { font-size: 1rem;   }
 .hero-container {
     width: 100%;
     text-align: center;
+    background-color: #FEF9EC; /* Set the background color to match the image */
 }
 
 .hero-image {
