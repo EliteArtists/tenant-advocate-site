@@ -10,7 +10,7 @@ body {
 header {
     background: #f9f9f9;
     color: #000;
-    padding: 0.25rem;
+    padding: 0.10rem;
     display: flex; /* Use flexbox */
     justify-content: space-between; /* Space items out */
     align-items: center; /* Vertically center items */
