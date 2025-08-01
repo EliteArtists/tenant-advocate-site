@@ -294,7 +294,7 @@ header p  { font-size: 1rem;   }
 }
 
 .hero-image {
-    max-width: 1000px; /* Adjust max width as needed */
+    max-width: 1500px; /* Adjust max width as needed */
     width: 100%; /* Make it responsive */
     height: auto;
 }
