@@ -290,7 +290,7 @@ header p  { font-size: 1rem;   }
 .hero-container {
     width: 100%;
     text-align: center; /* Center the image */
-    padding: 2rem 0; /* Add top and bottom padding */
+    padding: 1rem 0; /* Add top and bottom padding */
 }
 
 .hero-image {
