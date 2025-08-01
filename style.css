@@ -12,7 +12,7 @@ header {
     color: #000;
     padding: 0;
     display: flex; /* Use flexbox */
-    justify-content: space-between; /* Space items out */
+    justify-content: center; /* Space items out */
     align-items: center; /* Vertically center items */
     position: relative; /* Essential for burger menu positioning */
 }
