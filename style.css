@@ -285,3 +285,16 @@ header p  { font-size: 1rem;   }
     0%   { transform: translate(0, 0); }
     100% { transform: translate(-100%, 0); } /* Scrolls from right to left */
 }
+
+/* Hero Image Styling */
+.hero-container {
+    width: 100%;
+    text-align: center; /* Center the image */
+    padding: 2rem 0; /* Add top and bottom padding */
+}
+
+.hero-image {
+    max-width: 900px; /* Adjust max width as needed */
+    width: 100%; /* Make it responsive */
+    height: auto;
+}
