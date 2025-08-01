@@ -3,12 +3,12 @@
 
 body {
   font-family: Arial, sans-serif;
-  background: #FFFDF8;
+  background: #F2F0EA;
   color: #000;
 }
 
 header {
-    background: #FFFDF8;
+    background: #F2F0EA;
     color: #000;
     padding: 0;
     display: flex; /* Use flexbox */
@@ -263,7 +263,7 @@ header p  { font-size: 1rem;   }
 .marquee-container {
     width: 100%;
     overflow: hidden; /* Hide anything outside this box */
-    background-color: #FFFDF8; /* Light grey background for the marquee bar */
+    background-color: #F2F0EA; /* Light grey background for the marquee bar */
     padding: 0.75rem 0; /* Vertical padding */
     white-space: nowrap; /* Keep text on a single line */
     box-sizing: border-box; /* Include padding in element's total width */
