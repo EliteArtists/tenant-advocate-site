@@ -12,6 +12,7 @@
 </div>
     
     <header>
+    <button id="add-agent-button" style="background: none; border: none; color: #333; font-weight: bold; cursor: pointer;">Add Agent</button>    
     <img src="assets/Color logo - no background.svg" alt="Tenant Advocate Logo" class="header-logo">
 
     <div class="burger-menu-container">
@@ -38,16 +39,6 @@
         PLEASE BEAR WITH US AS WE CONTINUE TO IMPROVE THE WEBSITE'S FEATURES AND DATA.
     </p>
 </div>
-<form id="add-agent-form">
-</form>
-
-    <form id="add-agent-form">
-    <input name="name" id="agent-name-input" placeholder="Name" required>
-    <input name="location" placeholder="Location" required>
-    <input name="full_address" placeholder="Full address" required>
-    <input type="hidden" name="slug" id="slug-input">
-    <button type="submit">Add Agent</button>
-</form>
 
     <div class="search-container">
         <input type="text" id="search" placeholder="Search agents…">
@@ -58,21 +49,19 @@
             </div>
     </main>
 
-    <div id="agent-detail-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">×</span>
-            <h2 id="detail-agent-name"></h2>
-            <p id="detail-full-address"></p>
-            <p>Google Rating: <span id="detail-google-rating"></span> ⭐ (<span id="detail-google-reviews"></span> reviews)</p>
-            <p>Trustpilot Rating: <span id="detail-trustpilot-rating">N/A</span> ⭐</p>
-            <div id="detail-reviews-section" style="margin-top: 20px;">
-                <h3>Reviews</h3>
-                <p>Actual Google review text cannot be displayed directly due to API terms.</p>
-                <p id="detail-google-map-link"></p>
-                <p>Trustpilot reviews not yet integrated.</p>
-            </div>
-        </div>
+    <div id="add-agent-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button add-agent-close-button">×</span>
+        <h2 style="margin-bottom: 1rem;">Add a New Agent</h2>
+        <form id="add-agent-form">
+            <input name="name" id="agent-name-input" placeholder="Name" required>
+            <input name="location" placeholder="Location" required>
+            <input name="full_address" placeholder="Full address" required>
+            <input type="hidden" name="slug" id="slug-input">
+            <button type="submit">Add Agent</button>
+        </form>
     </div>
+</div>
 
     <div id="add-agent-modal" class="modal">
     <div class="modal-content">
