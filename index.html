@@ -41,13 +41,13 @@
 <form id="add-agent-form">
 </form>
 
-    <form id="add-agent-form" style="margin:1em 0;">
-        <input name="name"           placeholder="Name"          required>
-        <input name="location"       placeholder="Location"      required>
-        <input name="full_address"   placeholder="Full address"  required>
-        <input name="slug"           placeholder="Slug (url-safe)" required>
-        <button type="submit">Add Agent</button>
-    </form>
+    <form id="add-agent-form">
+    <input name="name" id="agent-name-input" placeholder="Name" required>
+    <input name="location" placeholder="Location" required>
+    <input name="full_address" placeholder="Full address" required>
+    <input type="hidden" name="slug" id="slug-input">
+    <button type="submit">Add Agent</button>
+</form>
 
     <div class="search-container">
         <input type="text" id="search" placeholder="Search agents…">
