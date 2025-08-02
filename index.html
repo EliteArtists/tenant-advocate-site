@@ -274,37 +274,59 @@
             });
         });
 
-        // add agent form handler (keep this as is)
-        const form = document.querySelector('#add-agent-form');
-        const grid = document.querySelector('#agents-grid');
+        // Function to automatically generate a URL-safe slug
+function generateSlug(text) {
+    return text
+        .toString()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w-]+/g, '')
+        .replace(/--+/g, '-');
+}
 
-        form.addEventListener('submit', async evt => {
-            evt.preventDefault();
+// add agent form handler
+const form = document.querySelector('#add-agent-form');
+const grid = document.querySelector('#agents-grid');
+const nameInput = document.getElementById('agent-name-input');
+const slugInput = document.getElementById('slug-input');
 
-            const payload = {
-                name: form.name.value,
-                location: form.location.value,
-                full_address: form.full_address.value,
-                slug: form.slug.value,
-            };
+// Listen for input on the agent name field to automatically generate the slug
+nameInput.addEventListener('input', (event) => {
+    const name = event.target.value;
+    const slug = generateSlug(name);
+    slugInput.value = slug;
+});
 
-            const res = await fetch('https://tenant-advocate-api.vercel.app/api/agents', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
+form.addEventListener('submit', async evt => {
+    evt.preventDefault();
 
-            const data = await res.json();
-            if (!res.ok) {
-                return alert('Insert failed: ' + (data.error || res.statusText));
-            }
+    const payload = {
+        name: nameInput.value,
+        location: form.location.value,
+        full_address: form.full_address.value,
+        slug: slugInput.value, // Use the new hidden slug input field
+    };
 
-            // Assuming your POST API returns the full agent object with new data
-            const newCard = createAgentCard(data);
-            grid.appendChild(newCard);
+    const res = await fetch('https://tenant-advocate-api.vercel.app/api/agents', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    });
 
-            form.reset();
-        });
+    const data = await res.json();
+    if (!res.ok) {
+        return alert('Insert failed: ' + (data.error || res.statusText));
+    }
+
+    // Assuming your POST API returns the full agent object with new data
+    const newCard = createAgentCard(data);
+    grid.appendChild(newCard);
+
+    form.reset();
+});
     </script>
 </body>
 </html>
